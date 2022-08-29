@@ -5,7 +5,14 @@ const { BIP32Factory } = require('bip32')
 const bip32 = BIP32Factory(ecc)
 const createHmac = require('create-hmac');
 
-const node = bip32.fromBase58('xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi')
+const node = bip32.fromBase58('xprv9s21ZrQH143K31xYSDQpPDxsXRTUcvj2iNHm5NUtrGiGG5e2DtALGdso3pGz6ssrdK4PFmM8NSpSBHNqPqm55Qn3LqFtT2emdEXVYsCzC2U')
+
+const neuteredNode = node.neutered()
+const derivedFromNeutered = neuteredNode.derive(0)
+console.log('Public Key', node.publicKey)
+console.log('Chain Code', node.chainCode)
+console.log('Derived from Neutered Public Key', derivedFromNeutered.publicKey)
+console.log('Derived from Neutered Chain Chode', derivedFromNeutered.chainCode)
 
 const child = node.deriveHardened(0);
 
