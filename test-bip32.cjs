@@ -35,3 +35,24 @@ console.log('child private key:', child.privateKey);
 console.log('child chain code:', child.chainCode);
 console.log('parent public key:', node.publicKey);
 console.log('child fingerprint:', child.fingerprint);
+
+const nodepub = bip32.fromBase58('xpub661MyMwAqRbcFW31YEwpkMuc5THy2PSt5bDMsktWQcFF8syAmRUapSCGu8ED9W6oDMSgv6Zz8idoc4a6mr8BDzTJY47LJhkJ8UB7WEGuduB')
+const childp = nodepub.derive(0)
+
+const datap = Buffer.allocUnsafe(37);
+
+nodepub.publicKey.copy(datap, 0);
+datap.writeUInt32BE(0, 33);
+
+Ip = createHmac('sha512', nodepub.chainCode)
+    .update(datap)
+    .digest();
+
+console.log('Public Key:', nodepub.publicKey)
+
+const Ki = Buffer.from(ecc.pointAddScalar(nodepub.publicKey, Ip.slice(0, 32)), true);
+
+console.log('IRp:', Ip.slice(32));
+console.log('child public chain code:', childp.chainCode)
+console.log('Ki:', Ki)
+console.log('child public public key:', childp.publicKey)
